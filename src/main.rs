@@ -22,10 +22,12 @@ pub extern "C" fn main() {
     let mut led = pins.pb5.into_output();
 
     let mut delay = atmega_hal::delay::Delay::<MHz16>::new();
+
+    ufmt::uwriteln!(&mut serial, "Hello, world!").unwrap();
+    ufmt::uwriteln!(&mut serial, "Entering buzy loop").unwrap();
     loop {
         let t1: u16 = 200;
         delay.delay_ms(t1);
         led.toggle();
-        ufmt::uwriteln!(&mut serial, "Hello, world!").unwrap();
     }
 }
