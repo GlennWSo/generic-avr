@@ -15,12 +15,12 @@ panic-halt = "0.2.0"
 ufmt = "0.1.0"
 nb = "0.1.2"
 embedded-hal = "0.2.3"
-ruduino = {  git = "https://github.com/avr-rust/ruduino", branch = "master" }
+# ruduino = {  git = "https://github.com/avr-rust/ruduino", branch = "master" }
 
-[dependencies.atmega-hal]
+[dependencies.atxmega-hal]
 git = "https://github.com/rahix/avr-hal"
-rev = "4c9c44c314eb061ee20556ef10d45dea36e75ee4"
-features = ["atmega328p"]
+rev = "6e47364d41331f2846e4c7a2a9f9250e23b5a3c3"
+features = ["atmega4809", "rt"]
 
 # Configure the build for minimal size - AVRs have very little program memory
 [profile.dev]
