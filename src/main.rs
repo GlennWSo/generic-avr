@@ -1,33 +1,34 @@
 #![no_std]
 #![no_main]
 
-use atmega_hal::adc;
-use atmega_hal::clock::{Clock, MHz16};
-use atmega_hal::prelude::*;
-use atmega_hal::usart::Baudrate;
-// use embedded_hal::serial::Read;
-// use heapless::String;
-// use heapless::Vec;
+// Proof of concept, all hacked together right now...
+//
+// Compile with the dirty avr-atmega4809.json target (which actually uses atxmega32a4 ...).
+//
+// Flashing works using the following command, based on the Arduino stuff (not verified anything
+// else yet):
+//
+// stty -F /dev/ttyACM0 hup 1200 && \
+//      echo 1>/dev/ttyACM0 && \
+//      ~/.arduino15/packages/arduino/tools/avrdude/6.3.0-arduino17/bin/avrdude \
+//          -C${HOME}/.arduino15/packages/arduino/tools/avrdude/6.3.0-arduino17/etc/avrdude.conf \
+//          -v -patmega4809 -cjtag2updi -P/dev/ttyACM0 -b115200 -e -D \
+//          -Uflash:w:../../target/avr-atmega4809/release/every-blink.elf:e
+
 use panic_halt as _;
 
-#[no_mangle]
-pub extern "C" fn main() {
-    let dp = atmega_hal::Peripherals::take().unwrap();
-    let pins = atmega_hal::pins!(dp);
-    // let mut serial = atmega_hal::default_serial!(dp, pins, 57600);
+use embedded_hal::blocking::delay::DelayMs;
 
-    let brate: Baudrate<MHz16> = Baudrate::new(56700);
-    let mut serial = atmega_hal::Usart::new(dp.USART0, pins.pd0, pins.pd1.into_output(), brate);
+#[atxmega_hal::entry]
+fn main() -> ! {
+    let dp = atxmega_hal::Peripherals::take().unwrap();
 
-    let mut led = pins.pb5.into_output();
+    let mut led = dp.pins.pe2.into_output();
 
-    let mut delay = atmega_hal::delay::Delay::<MHz16>::new();
+    let mut delay = atxmega_hal::delay::Delay::<atxmega_hal::clock::MHz16>::new();
 
-    ufmt::uwriteln!(&mut serial, "Hello, world!").unwrap();
-    ufmt::uwriteln!(&mut serial, "Entering buzy loop").unwrap();
     loop {
-        let t1: u16 = 200;
-        delay.delay_ms(t1);
         led.toggle();
+        delay.delay_ms(100u16);
     }
 }
