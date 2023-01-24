@@ -15,6 +15,8 @@
         buildInputs = [
           pkgs.pkgsCross.avr.buildPackages.gcc
           pkgs.avrdude
+          pkgs.screen
+          pkgs.usbutils
           ravedude.defaultPackage.${system}
           (fenix.packages.${system}.fromToolchainFile {
             file = ./rust-toolchain.toml;
