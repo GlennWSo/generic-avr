@@ -16,18 +16,19 @@ pub extern "C" fn main() {
     let pins = atmega_hal::pins!(dp);
     // let mut serial = atmega_hal::default_serial!(dp, pins, 57600);
 
-    let brate: Baudrate<MHz16> = Baudrate::new(56700);
+    let brate: Baudrate<MHz16> = Baudrate::new(9600);
     let mut serial = atmega_hal::Usart::new(dp.USART0, pins.pd0, pins.pd1.into_output(), brate);
 
     let mut led = pins.pb5.into_output();
 
     let mut delay = atmega_hal::delay::Delay::<MHz16>::new();
 
-    ufmt::uwriteln!(&mut serial, "Hello, world!").unwrap();
-    ufmt::uwriteln!(&mut serial, "Entering buzy loop").unwrap();
+    ufmt::uwriteln!(&mut serial, "Hello, world!\r").unwrap();
+    ufmt::uwriteln!(&mut serial, "Entering buzy loop\r").unwrap();
     loop {
-        let t1: u16 = 200;
+        let t1: u16 = 1000;
         delay.delay_ms(t1);
         led.toggle();
+        ufmt::uwriteln!(&mut serial, "toggled\r").unwrap();
     }
 }
