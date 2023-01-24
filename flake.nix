@@ -23,6 +23,7 @@
             sha256 = "sha256-kI+vy5ThOmIdokk5Xtg1I7MyG1xzihcfI0T+hrAgsjA=";
           })
         ];
+        shellHook = "export AVR_CPU_FREQUENCY_HZ=16000000";
       };
     };
 }
